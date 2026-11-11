@@ -21,6 +21,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
+    <!-- dev-only:start -->
+    <script>
+      // GitHub Pages 若設定成從根目錄發佈，自動轉到已建置好的 docs/ 版本
+      if (location.hostname.endsWith('github.io')) location.replace('docs/' + location.hash);
+    </script>
+    <!-- dev-only:end -->
     <div id="root"></div>
     <noscript>此網站需要啟用 JavaScript 才能操作互動功能。</noscript>
     <script type="module" src="/src/main.tsx"></script>
