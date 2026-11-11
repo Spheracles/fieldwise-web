@@ -48,8 +48,8 @@ src/
 | 想改什麼 | 改哪裡 |
 |---|---|
 | 品牌名稱、標語 | `config/site.ts` → `brand` |
-| 開通 LINE 官方帳號 | `config/site.ts` → `contact.lineUrl` 填入加好友網址；未填時一律顯示「LINE 官方帳號建置中」 |
-| Email／電話 | `config/site.ts` → `contact.email`、`contact.phone` |
+| 聯絡方式測試模式 | `config/site.ts` → `contactTestMode: true` 時顯示 `test@example.com`、`09XX-XXX-XXX`、「LINE 測試帳號」並標示「測試資料」，LINE 按鈕不外連 |
+| 切換成正式營運 | `config/site.ts` → 填入 `contact.lineUrl`（LINE 加好友網址）、`contact.email`、`contact.phone`，再把 `contactTestMode` 改成 `false`；未填的項目會顯示「建置中」 |
 | 價格、季繳金額、時數 | `config/plans.ts` → `PLANS`（季繳為 3 個月總額，節省金額自動計算） |
 | 含稅／未稅 | `config/site.ts` → `pricing.taxIncluded` |
 | 色彩 | `src/index.css` → `@theme` |

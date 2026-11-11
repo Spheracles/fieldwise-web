@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { SERVICES } from '../../config/services';
-import { SITE } from '../../config/site';
+import { SITE, contactInfo } from '../../config/site';
 import { cx } from '../../lib/format';
 import { track } from '../../lib/track';
 import { useScrollSpy } from '../../hooks/useMotion';
@@ -329,7 +329,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
           </Button>
           <LineButton from="mobile_menu" />
         </div>
-        {!SITE.contact.lineUrl && <p className="mt-2 text-center text-[14px] text-muted">LINE 官方帳號建置中</p>}
+        {!contactInfo().lineUrl && <p className="mt-2 text-center text-[14px] text-muted">{contactInfo().test ? 'LINE 為測試模式，不會開啟' : 'LINE 官方帳號建置中'}</p>}
       </nav>
     </div>
   );

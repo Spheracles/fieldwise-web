@@ -1,16 +1,17 @@
-import { SITE } from '../../config/site';
+import { contactInfo } from '../../config/site';
 import { useApp } from '../../context/AppContext';
 import { cx } from '../../lib/format';
 import { track } from '../../lib/track';
 import { Icon } from './Icon';
 
 /**
- * LINE 洽詢入口：只有在 SITE.contact.lineUrl 設定有效官方連結時才外連，
- * 否則顯示「LINE 官方帳號建置中」，不放虛構 ID 或失效網址。
+ * LINE 洽詢入口：只有正式模式且 SITE.contact.lineUrl 設定有效官方連結時才外連；
+ * 測試模式顯示測試提示，未設定時顯示「LINE 官方帳號建置中」，不放虛構 ID 或失效網址。
  */
 export function LineButton({ from, className, label = 'LINE 洽詢', size = 'lg' }: { from: string; className?: string; label?: string; size?: 'md' | 'lg' }) {
   const { notify } = useApp();
-  const url = SITE.contact.lineUrl;
+  const info = contactInfo();
+  const url = info.lineUrl;
   const cls = cx(
     'inline-flex items-center justify-center gap-2 rounded-full border border-forest/35 bg-white/80 font-semibold tracking-wide text-forest transition-colors hover:border-forest hover:bg-white',
     size === 'lg' ? 'min-h-[3.25rem] px-6 text-[17px]' : 'min-h-11 px-4 text-[15px]',
@@ -31,14 +32,19 @@ export function LineButton({ from, className, label = 'LINE 洽詢', size = 'lg'
       className={cls}
       aria-describedby="line-status"
       onClick={() => {
-        track('line_click', { from, configured: false });
-        notify('LINE 官方帳號建置中，目前請先使用網站表單預約初談。', 'warn');
+        track('line_click', { from, configured: false, test: info.test });
+        notify(
+          info.test
+            ? '測試模式：正式上線後，這裡會開啟 LINE 官方帳號的加好友頁面。'
+            : 'LINE 官方帳號建置中，目前請先使用網站表單預約初談。',
+          'warn',
+        );
       }}
     >
       <Icon name="message-circle" size={20} />
       {label}
       <span id="line-status" className="sr-only">
-        （LINE 官方帳號建置中）
+        {info.test ? '（測試模式，不會開啟 LINE）' : '（LINE 官方帳號建置中）'}
       </span>
     </button>
   );

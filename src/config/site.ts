@@ -17,6 +17,19 @@ export const SITE = {
   /** true＝所有表單、LINE、付款、登入皆為前端示範，不會送出任何資料 */
   demoMode: true,
 
+  /**
+   * 聯絡方式測試模式：true＝顯示明顯的佔位值並標示「測試資料」，LINE 不會外連。
+   * 正式營運時：填好下方 contact 的 lineUrl／email／phone，再改成 false。
+   */
+  contactTestMode: true,
+
+  /** 測試用佔位值：example.com 為國際保留的範例網域，不會寄到任何人 */
+  testContact: {
+    email: 'test@example.com',
+    phone: '09XX-XXX-XXX',
+    line: 'LINE 測試帳號',
+  },
+
   contact: {
     /** 填入 LINE 官方帳號加好友網址（例：https://lin.ee/xxxx）後才會開啟外連；null＝建置中 */
     lineUrl: null as string | null,
@@ -53,3 +66,16 @@ export const SITE = {
 } as const;
 
 export const taxLabel = SITE.pricing.taxIncluded ? '價格含營業稅' : '價格未含營業稅';
+
+/** 畫面上要顯示的聯絡方式；測試模式時回傳佔位值，正式模式時回傳實際值或 null（顯示建置中） */
+export function contactInfo() {
+  const test = SITE.contactTestMode;
+  return {
+    test,
+    email: test ? SITE.testContact.email : SITE.contact.email,
+    phone: test ? SITE.testContact.phone : SITE.contact.phone,
+    line: test ? SITE.testContact.line : SITE.contact.lineUrl ? 'LINE 官方帳號' : null,
+    /** 只有正式模式且有設定連結時才外連 */
+    lineUrl: test ? null : SITE.contact.lineUrl,
+  };
+}

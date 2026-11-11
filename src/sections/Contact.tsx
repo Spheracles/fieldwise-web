@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { BUDGETS, CLIENT_TYPES, NOTES_MAX, PLAN_OPTIONS, PROBLEMS, REGIONS, ROLES, SCALES, START_TIMES, type ProblemId } from '../config/form';
-import { SITE } from '../config/site';
+import { SITE, contactInfo } from '../config/site';
 import { useApp } from '../context/AppContext';
 import { cx } from '../lib/format';
 import { INQUIRY_KEY, clearDemoData, readJSON, writeJSON, type LocalInquiry } from '../lib/storage';
@@ -61,6 +61,7 @@ function validate(f: FormState): Errors {
 }
 
 export function Contact() {
+  const ci = contactInfo();
   return (
     <section id="contact" aria-labelledby="contact-title" className="relative bg-cream-deep/60 py-20 lg:py-28">
       <div className="container-x grid grid-cols-1 gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
@@ -102,13 +103,27 @@ export function Contact() {
               習慣用 LINE？
             </h3>
             <p className="mt-2 text-[15px] leading-relaxed text-white/80">
-              {SITE.contact.lineUrl ? '加入 LINE 官方帳號，直接留言給我們。' : 'LINE 官方帳號建置中，開通後會在這裡提供加入連結。'}
+              {ci.test
+                ? '目前為測試模式：LINE 按鈕不會開啟任何帳號，正式上線後會換成官方帳號的加好友連結。'
+                : ci.lineUrl
+                  ? '加入 LINE 官方帳號，直接留言給我們。'
+                  : 'LINE 官方帳號建置中，開通後會在這裡提供加入連結。'}
             </p>
             <div className="mt-4 flex flex-wrap items-center gap-3">
               <LineButton from="contact" className="!border-white/30 !bg-white !text-forest" />
-              {!SITE.contact.lineUrl && <span className="rounded-full border border-dashed border-white/40 px-3 py-1 text-[13px] text-white/75">LINE 官方帳號建置中</span>}
+              {!ci.lineUrl && (
+                <span className="rounded-full border border-dashed border-white/40 px-3 py-1 text-[13px] text-white/75">{ci.test ? '測試資料' : 'LINE 官方帳號建置中'}</span>
+              )}
             </div>
             <dl className="mt-5 grid grid-cols-1 gap-2 border-t border-white/15 pt-4 text-[14px] text-white/75">
+              <div className="flex gap-2">
+                <dt className="shrink-0 text-white/60">Email</dt>
+                <dd>{ci.email ?? '建置中'}{ci.test && <span className="ml-2 text-[12px] text-white/55">（測試資料）</span>}</dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="shrink-0 text-white/60">電話</dt>
+                <dd>{ci.phone ?? '建置中'}{ci.test && <span className="ml-2 text-[12px] text-white/55">（測試資料）</span>}</dd>
+              </div>
               <div className="flex gap-2">
                 <dt className="shrink-0 text-white/60">服務時間</dt>
                 <dd>{SITE.contact.serviceHours}</dd>
@@ -468,7 +483,7 @@ function ConsultForm() {
             <h3 className="mt-4 font-serif text-[24px] font-bold text-forest-deep">這是前端示範，尚未送達團隊。</h3>
             <p className="mx-auto mt-3 max-w-lg text-[16px] leading-[1.85] text-[#5A4216]">
               你的資料只在這個瀏覽器中完成了檢查與預覽，沒有傳送到任何伺服器，團隊也不會收到通知。
-              {SITE.contact.lineUrl ? '如需聯繫，請使用 LINE 官方帳號。' : '正式受理管道開通前，請勿以此視為已完成預約。'}
+              {contactInfo().lineUrl ? '如需聯繫，請使用 LINE 官方帳號。' : '正式受理管道開通前，請勿以此視為已完成預約。'}
             </p>
           </div>
 

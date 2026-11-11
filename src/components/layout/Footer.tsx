@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useApp } from '../../context/AppContext';
 import { SERVICES } from '../../config/services';
-import { SITE } from '../../config/site';
+import { SITE, contactInfo } from '../../config/site';
 import { clearDemoData } from '../../lib/storage';
 import { track } from '../../lib/track';
 import { useInView } from '../../hooks/useMotion';
@@ -12,6 +12,7 @@ import { NAV_ITEMS } from './Header';
 
 export function Footer() {
   const { showService, notify } = useApp();
+  const ci = contactInfo();
   return (
     <footer className="relative overflow-hidden bg-forest-deep text-white/85">
       <svg aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-24 w-full text-cream" viewBox="0 0 1440 96" preserveAspectRatio="none">
@@ -81,19 +82,22 @@ export function Footer() {
           </FooterCol>
 
           <div>
-            <h3 className="text-[15px] font-semibold tracking-[0.15em] text-gold">聯絡我們</h3>
+            <h3 className="flex items-center gap-2 text-[15px] font-semibold tracking-[0.15em] text-gold">
+              聯絡我們
+              {ci.test && <span className="rounded-full border border-dashed border-white/40 px-2 py-0.5 text-[12px] font-medium tracking-normal text-white/80">測試資料</span>}
+            </h3>
             <ul className="mt-4 space-y-2 text-[15px]">
               <li className="flex items-start gap-2">
                 <Icon name="mail" size={18} className="mt-1 shrink-0 text-sage" />
-                <span>{SITE.contact.email ?? 'Email 建置中，請先使用網站表單'}</span>
+                <span>{ci.email ?? 'Email 建置中，請先使用網站表單'}</span>
               </li>
               <li className="flex items-start gap-2">
                 <Icon name="phone" size={18} className="mt-1 shrink-0 text-sage" />
-                <span>{SITE.contact.phone ?? '電話建置中'}</span>
+                <span>{ci.phone ?? '電話建置中'}</span>
               </li>
               <li className="flex items-start gap-2">
                 <Icon name="message-circle" size={18} className="mt-1 shrink-0 text-sage" />
-                <span>{SITE.contact.lineUrl ? 'LINE 官方帳號' : 'LINE 官方帳號建置中'}</span>
+                <span>{ci.line ?? 'LINE 官方帳號建置中'}</span>
               </li>
               <li className="flex items-start gap-2">
                 <Icon name="clock" size={18} className="mt-1 shrink-0 text-sage" />

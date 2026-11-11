@@ -110,6 +110,7 @@ const tagStyles = {
   example: 'border-sage bg-sage-mist text-forest',
   draft: 'border-danger/40 bg-danger-soft text-danger',
   illus: 'border-white/60 bg-white/85 text-forest-deep',
+  test: 'border-[#7A9BB8] bg-[#EEF3F8] text-[#2F4F6B]',
 };
 
 const tagLabels = {
@@ -118,6 +119,7 @@ const tagLabels = {
   example: '內容範例',
   draft: '草稿佔位',
   illus: '情境示意',
+  test: '測試資料',
 };
 
 export function Tag({ kind, children, className }: { kind: keyof typeof tagStyles; children?: ReactNode; className?: string }) {
