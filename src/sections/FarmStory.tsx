@@ -40,7 +40,12 @@ export function FarmStory() {
 
   return (
     <Reveal className="mt-16 grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-12">
-      <figure className="relative overflow-hidden rounded-[28px] bg-forest-deep shadow-lift ring-1 ring-forest/10">
+      <figure>
+        <figcaption className="mb-2.5 flex items-center gap-1.5 text-[13.5px] leading-snug text-muted">
+          <Icon name="info" size={15} className="shrink-0" />
+          情境示意影片（AI 生成），非真實客戶或案例
+        </figcaption>
+        <div className="relative overflow-hidden rounded-[28px] bg-forest-deep shadow-lift ring-1 ring-forest/10">
         {failed ? (
           <img src={POSTER} alt="情境示意：果園中的農友整理鳳梨與荔枝，旁邊的手機顯示商品頁面" className="aspect-video w-full object-cover" />
         ) : (
@@ -59,10 +64,6 @@ export function FarmStory() {
             aria-label="情境示意影片：農友在果園採收鳳梨與荔枝、與親子家庭互動，最後用手機整理商品"
           />
         )}
-        <figcaption className="pointer-events-none absolute left-3 top-3 flex items-center gap-1.5 rounded-xl bg-white/85 px-3 py-1.5 text-[12.5px] leading-snug text-forest-deep backdrop-blur">
-          <Icon name="info" size={14} className="shrink-0" />
-          情境示意影片（AI 生成），非真實客戶或案例
-        </figcaption>
         {!failed && (
           <div className="absolute bottom-3 right-3 flex gap-2">
             <button
@@ -94,6 +95,7 @@ export function FarmStory() {
             </button>
           </div>
         )}
+        </div>
       </figure>
 
       <div>
