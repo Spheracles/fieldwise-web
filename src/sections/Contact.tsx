@@ -6,6 +6,7 @@ import { cx } from '../lib/format';
 import { INQUIRY_KEY, clearDemoData, readJSON, writeJSON, type LocalInquiry } from '../lib/storage';
 import { track } from '../lib/track';
 import { isEmail, isTwPhone } from '../lib/validation';
+import { formLive, markSubmitted, recentlySubmitted, submitToGoogleForm } from '../lib/submit';
 import { Icon } from '../components/ui/Icon';
 import { Button, NavLink, Reveal, SectionHeading } from '../components/ui/primitives';
 import { LineButton } from '../components/ui/LineButton';
@@ -75,7 +76,7 @@ export function Contact() {
             desc="先聊聊農場現在的狀況與最想解決的事。初談僅做問題初篩，不會要求你當場決定任何方案。"
           />
           <Reveal className="-mt-4 rounded-[28px] bg-white p-6 ring-1 ring-line">
-            <h3 className="text-[16px] font-bold text-forest-deep">正式上線後，送出表單會發生什麼</h3>
+            <h3 className="text-[16px] font-bold text-forest-deep">{formLive() ? '送出表單後會發生什麼' : '正式上線後，送出表單會發生什麼'}</h3>
             <ol className="mt-4 space-y-4">
               {[
                 ['顧問確認需求', '依你填寫的主要問題，安排合適的顧問。'],
@@ -93,7 +94,9 @@ export function Contact() {
             </ol>
             <p className="mt-5 flex items-start gap-2 rounded-2xl bg-gold-soft/70 p-3.5 text-[14px] leading-relaxed text-[#5A4216]">
               <Icon name="info" size={16} className="mt-0.5 shrink-0 text-gold-deep" />
-              目前為示範模式：表單只在你的瀏覽器中檢查與預覽，不會寄出、也不會通知團隊。
+              {formLive()
+                ? '表單資料透過 Google 表單傳送並儲存，只用於回覆諮詢與安排初談。'
+                : '目前為示範模式：表單只在你的瀏覽器中檢查與預覽，不會寄出、也不會通知團隊。'}
             </p>
           </Reveal>
 
@@ -151,6 +154,10 @@ function ConsultForm() {
   const [prefillLabel, setPrefillLabel] = useState<string | null>(null);
   const [showSummary, setShowSummary] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+  const honeypot = useRef<HTMLInputElement>(null);
+  const live = formLive();
   const started = useRef(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
@@ -203,10 +210,52 @@ function ConsultForm() {
     requestAnimationFrame(() => cardRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' }));
   };
 
-  const submitDemo = () => {
-    track('form_submit_demo', { problems: f.problems.length, plan: f.plan || 'none' });
-    setStep('done');
-    setSaved(false);
+  const submitDemo = async () => {
+    setSendError(null);
+    if (!live) {
+      track('form_submit_demo', { problems: f.problems.length, plan: f.plan || 'none' });
+      setStep('done');
+      setSaved(false);
+      requestAnimationFrame(() => cardRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' }));
+      return;
+    }
+    // 隱藏欄位被填入＝機器人，假裝成功但不送出
+    if (honeypot.current?.value) {
+      setStep('done');
+      return;
+    }
+    if (recentlySubmitted()) {
+      setSendError('你剛剛已經送出過一次了，請稍候一分鐘再試；若是要補充資料，可以直接重新填寫。');
+      return;
+    }
+    setSending(true);
+    try {
+      const now = new Date();
+      const pad = (n: number) => String(n).padStart(2, '0');
+      await submitToGoogleForm({
+        name: f.name.trim(),
+        org: f.org.trim(),
+        role: f.role,
+        email: f.email.trim(),
+        phone: f.phone.trim(),
+        region: f.region,
+        clientType: f.clientType,
+        problems: f.problems.map((p) => PROBLEMS.find((x) => x.id === p)!.label).join('、'),
+        scale: f.scale,
+        budget: f.budget,
+        plan: PLAN_OPTIONS.find((p) => p.value === f.plan)?.label ?? '尚未決定',
+        startTime: f.startTime,
+        notes: f.notes.trim(),
+        consentAt: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}（已同意個資蒐集告知）`,
+      });
+      markSubmitted();
+      track('form_submit_demo', { live: true, problems: f.problems.length, plan: f.plan || 'none' });
+      setStep('done');
+    } catch {
+      setSendError('送出時連線失敗，資料還沒有送到。請確認網路後再按一次「確認送出」。');
+    } finally {
+      setSending(false);
+    }
     requestAnimationFrame(() => cardRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' }));
   };
 
@@ -248,6 +297,12 @@ function ConsultForm() {
 
       {step === 'edit' && (
         <form noValidate onFocusCapture={onFocusCapture} onSubmit={(e) => { e.preventDefault(); review(); }} aria-describedby="form-req-note">
+          <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+            <label>
+              請勿填寫此欄
+              <input ref={honeypot} type="text" name="website" tabIndex={-1} autoComplete="off" />
+            </label>
+          </div>
           <p id="form-req-note" className="mb-6 text-[14px] text-muted">
             標示 <span className="font-bold text-danger">*</span> 為必填。請勿填寫身分證字號、銀行帳號等敏感資料。
           </p>
@@ -427,6 +482,7 @@ function ConsultForm() {
                 <li>蒐集者：田序共創（公司名稱建置中）。</li>
                 <li>蒐集目的：回覆諮詢、安排初談與後續服務聯繫。</li>
                 <li>個人資料類別：姓名或稱呼、聯絡方式、農場與經營相關資訊。</li>
+                <li>儲存方式：資料透過 Google 表單送出並儲存於 Google 雲端服務（Google LLC 提供，伺服器可能位於臺灣以外地區），僅團隊授權人員可以查看。</li>
                 <li>利用期間、地區、對象及方式：於蒐集目的存續期間，在臺灣地區由本團隊以電子或書面方式利用；正式保留期限將於上線前公告。</li>
                 <li>你可以依個人資料保護法第 3 條，請求查詢、閱覽、製給複製本、補充或更正、停止蒐集處理利用或刪除。</li>
                 <li>你可以自由選擇是否提供；若未提供必填資料，我們將無法回覆諮詢。</li>
@@ -436,7 +492,7 @@ function ConsultForm() {
           </div>
 
           <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-[14px] text-muted">下一步會先顯示摘要，確認後才會「示範送出」。</p>
+            <p className="text-[14px] text-muted">{live ? '下一步會先顯示摘要，確認無誤後才會送出。' : '下一步會先顯示摘要，確認後才會「示範送出」。'}</p>
             <Button type="submit" size="lg" iconRight="arrow-right" onClick={(e) => { e.preventDefault(); review(); }}>
               檢查並預覽
             </Button>
@@ -447,7 +503,9 @@ function ConsultForm() {
       {step === 'review' && (
         <div className="fade-in">
           <h3 className="font-serif text-[24px] font-bold text-forest-deep">請確認你的預約資料</h3>
-          <p className="mt-1 text-[15px] text-subtle">確認無誤後按「確認送出（示範）」；示範模式不會寄出任何資料。</p>
+          <p className="mt-1 text-[15px] text-subtle">
+            {live ? '確認無誤後按「確認送出」，資料會送給田序共創團隊。' : '確認無誤後按「確認送出（示範）」；示範模式不會寄出任何資料。'}
+          </p>
           <dl className="mt-6 divide-y divide-line overflow-hidden rounded-2xl border border-line">
             {ORDER.filter((k) => k !== 'consent').map((k) => (
               <div key={k} className="grid grid-cols-1 gap-1 px-4 py-3 sm:grid-cols-[150px_1fr] sm:gap-4">
@@ -463,18 +521,46 @@ function ConsultForm() {
               </dd>
             </div>
           </dl>
+          {sendError && (
+            <p role="alert" className="mt-5 flex items-start gap-2 rounded-2xl border border-danger/40 bg-danger-soft p-4 text-[15px] font-medium text-danger">
+              <Icon name="circle-alert" size={18} className="mt-0.5 shrink-0" />
+              {sendError}
+            </p>
+          )}
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:justify-between">
-            <Button variant="outline" icon="pencil" onClick={() => setStep('edit')}>
+            <Button variant="outline" icon="pencil" onClick={() => setStep('edit')} disabled={sending}>
               返回修改
             </Button>
-            <Button size="lg" icon="send" onClick={submitDemo}>
-              確認送出（示範）
+            <Button size="lg" icon="send" onClick={submitDemo} disabled={sending} aria-busy={sending}>
+              {sending ? '送出中…' : live ? '確認送出' : '確認送出（示範）'}
             </Button>
           </div>
         </div>
       )}
 
-      {step === 'done' && (
+      {step === 'done' && live && (
+        <div className="fade-in" role="status">
+          <div className="rounded-3xl border border-sage/50 bg-sage-mist p-6 text-center sm:p-8">
+            <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-forest text-white shadow-soft">
+              <Icon name="circle-check" size={32} />
+            </span>
+            <h3 className="mt-4 font-serif text-[24px] font-bold text-forest-deep">已送出預約，謝謝你！</h3>
+            <p className="mx-auto mt-3 max-w-lg text-[16px] leading-[1.85] text-subtle">
+              我們收到後會依你留下的 Email 或電話與你聯繫，安排 {SITE.freeConsultMinutes} 分鐘的免費線上初談。若幾個工作天內沒有收到回覆，歡迎再透過網站重新預約。
+            </p>
+          </div>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between">
+            <Button variant="ghost" icon="rotate-ccw" onClick={restart}>
+              再填一份
+            </Button>
+            <Button variant="outline" to="top" icon="house">
+              回到首頁頂端
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {step === 'done' && !live && (
         <div className="fade-in" role="status">
           <div className="rounded-3xl border-2 border-dashed border-gold/60 bg-gold-soft/50 p-6 text-center sm:p-8">
             <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-white text-gold-deep shadow-soft">
@@ -545,7 +631,7 @@ function StepIndicator({ step }: { step: 'edit' | 'review' | 'done' }) {
   const steps = [
     { k: 'edit', label: '填寫資料' },
     { k: 'review', label: '確認摘要' },
-    { k: 'done', label: '示範送出' },
+    { k: 'done', label: formLive() ? '送出完成' : '示範送出' },
   ];
   const idx = steps.findIndex((s) => s.k === step);
   return (

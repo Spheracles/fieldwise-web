@@ -30,6 +30,32 @@ export const SITE = {
     line: 'LINE 測試帳號',
   },
 
+  /**
+   * 預約表單送到 Google 表單。fields 的 entry 代號來自「取得預先填入的連結」，
+   * 順序需與 Google 表單題目一致；若題目有增刪，重新取得連結並更新這裡。
+   * enabled 改成 false 會回到純前端示範。
+   */
+  googleForm: {
+    enabled: true,
+    action: 'https://docs.google.com/forms/d/e/1FAIpQLSf7ONEeesRtgpViw_gXTzVPUWWjBT_kV2r6QdQLWj6sjnHlWQ/formResponse',
+    fields: {
+      name: 'entry.1308064626', // 姓名／稱呼
+      org: 'entry.425635036', // 單位／農場名稱
+      role: 'entry.2064493133', // 你的角色
+      email: 'entry.1307253599', // Email
+      phone: 'entry.2125624988', // 聯絡電話
+      region: 'entry.1652716674', // 服務區域
+      clientType: 'entry.1515782636', // 客戶類型
+      problems: 'entry.1636663631', // 主要問題
+      scale: 'entry.1657171400', // 土地／農場規模
+      budget: 'entry.525742114', // 每月預算級距
+      plan: 'entry.1227439472', // 有興趣的方案
+      startTime: 'entry.1348455360', // 希望開始時間
+      notes: 'entry.647637091', // 補充說明
+      consentAt: 'entry.94807364', // 個資同意時間
+    },
+  },
+
   contact: {
     /** 填入 LINE 官方帳號加好友網址（例：https://lin.ee/xxxx）後才會開啟外連；null＝建置中 */
     lineUrl: null as string | null,

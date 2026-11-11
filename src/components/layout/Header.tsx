@@ -34,10 +34,10 @@ export function DemoBanner() {
       <div className="container-x flex items-center gap-3 py-2">
         <Icon name="info" size={16} className="shrink-0 text-gold" />
         <p className="flex-1 leading-snug">
-          <strong className="font-semibold text-white">示範模式</strong>
+          <strong className="font-semibold text-white">試營運</strong>
           <span className="mx-1.5 text-white/40">｜</span>
-          <span className="sm:hidden">表單與 LINE 尚未串接，不會送出資料。</span>
-          <span className="hidden sm:inline">這是前端 MVP，表單、LINE 與付款尚未串接，不會送出任何資料；頁面數據皆為示範。</span>
+          <span className="sm:hidden">預約表單已開放，LINE 與付款建置中。</span>
+          <span className="hidden sm:inline">預約表單已開放受理；LINE 與付款尚在建置中，工作台與案例數據皆為示範。</span>
         </p>
         <button
           type="button"

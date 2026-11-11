@@ -49,6 +49,7 @@ src/
 |---|---|
 | 品牌名稱、標語 | `config/site.ts` → `brand` |
 | 聯絡方式測試模式 | `config/site.ts` → `contactTestMode: true` 時顯示 `test@example.com`、`09XX-XXX-XXX`、「LINE 測試帳號」並標示「測試資料」，LINE 按鈕不外連 |
+| Google 表單欄位 | `config/site.ts` → `googleForm.fields`；Google 表單題目有增刪時，重新「取得預先填入的連結」更新 entry 代號；`enabled: false` 可回到示範模式 |
 | 切換成正式營運 | `config/site.ts` → 填入 `contact.lineUrl`（LINE 加好友網址）、`contact.email`、`contact.phone`，再把 `contactTestMode` 改成 `false`；未填的項目會顯示「建置中」 |
 | 價格、季繳金額、時數 | `config/plans.ts` → `PLANS`（季繳為 3 個月總額，節省金額自動計算） |
 | 含稅／未稅 | `config/site.ts` → `pricing.taxIncluded` |
@@ -77,7 +78,7 @@ src/
 
 | 功能 | 目前狀態 | 正式上線需要 |
 |---|---|---|
-| 預約表單 | 只在瀏覽器檢查與預覽，顯示「這是前端示範，尚未送達團隊」 | 伺服器端 API、資料庫、垃圾訊息防護、確認信 |
+| 預約表單 | **已串接 Google 表單**（`config/site.ts` → `googleForm`）：送出後資料進入 Google 表單回覆與試算表；含隱藏防灌單欄位、60 秒內不重複送出 | 之後可改接自有後端與資料庫、加上 reCAPTCHA／Turnstile 與自動確認信 |
 | LINE 洽詢 | 未設定連結時顯示「LINE 官方帳號建置中」 | LINE 官方帳號、Messaging API（Channel token 由管理員提供） |
 | 會議預約 | 按鈕提示「尚未串接」 | 行事曆預約服務 |
 | 文件開啟／下載 | 提示「示範模式無法下載」 | 登入、檔案儲存、依權限存取 |
