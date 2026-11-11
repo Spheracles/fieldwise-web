@@ -8,6 +8,8 @@ import { Button, Reveal } from '../components/ui/primitives';
 /** 影片放在 public/media，以相對路徑載入（GitHub Pages 子路徑也適用） */
 const VIDEO = 'media/farm-story.mp4';
 const POSTER = 'media/farm-story-poster.jpg';
+/** 初始自動播放的次數 */
+const AUTO_PLAYS = 2;
 
 export function FarmStory() {
   const { navigate } = useApp();
@@ -15,6 +17,10 @@ export function FarmStory() {
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
   const [failed, setFailed] = useState(false);
+  const [showCtl, setShowCtl] = useState(false);
+  const plays = useRef(0); // 自動播放次數；播完 AUTO_PLAYS 次就停
+  const done = useRef(false);
+  const hideTimer = useRef<number | undefined>(undefined);
 
   // 進入畫面時自動靜音播放、離開時暫停；偏好減少動態時不自動播放
   useEffect(() => {
@@ -22,8 +28,9 @@ export function FarmStory() {
     if (!v || prefersReducedMotion() || !('IntersectionObserver' in window)) return;
     const io = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) v.play().catch(() => undefined);
-        else v.pause();
+        if (e.isIntersecting) {
+          if (!done.current) v.play().catch(() => undefined);
+        } else v.pause();
       },
       { threshold: 0.35 },
     );
@@ -34,8 +41,32 @@ export function FarmStory() {
   const toggle = () => {
     const v = ref.current;
     if (!v) return;
-    if (v.paused) v.play().catch(() => undefined);
-    else v.pause();
+    if (v.paused) {
+      if (v.ended || done.current) v.currentTime = v.ended ? 0 : v.currentTime;
+      v.play().catch(() => undefined);
+    } else v.pause();
+  };
+
+  const onEnded = () => {
+    const v = ref.current;
+    if (!v) return;
+    plays.current += 1;
+    if (plays.current < AUTO_PLAYS) {
+      v.currentTime = 0;
+      v.play().catch(() => undefined);
+    } else {
+      done.current = true;
+      setShowCtl(true);
+    }
+  };
+
+  // 觸控裝置沒有滑鼠移入：點一下影片顯示按鈕，3 秒後自動隱藏
+  const revealOnTouch = () => {
+    setShowCtl(true);
+    window.clearTimeout(hideTimer.current);
+    hideTimer.current = window.setTimeout(() => {
+      if (!done.current) setShowCtl(false);
+    }, 3000);
   };
 
   return (
@@ -45,7 +76,12 @@ export function FarmStory() {
           <Icon name="info" size={15} className="shrink-0" />
           情境示意影片（AI 生成），非真實客戶或案例
         </figcaption>
-        <div className="relative overflow-hidden rounded-[28px] bg-forest-deep shadow-lift ring-1 ring-forest/10">
+        <div
+          className="group relative overflow-hidden rounded-[28px] bg-forest-deep shadow-lift ring-1 ring-forest/10"
+          onPointerDown={(e) => {
+            if (e.pointerType !== 'mouse') revealOnTouch();
+          }}
+        >
         {failed ? (
           <img src={POSTER} alt="情境示意：果園中的農友整理鳳梨與荔枝，旁邊的手機顯示商品頁面" className="aspect-video w-full object-cover" />
         ) : (
@@ -55,17 +91,22 @@ export function FarmStory() {
             src={VIDEO}
             poster={POSTER}
             muted={muted}
-            loop
             playsInline
             preload="metadata"
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
+            onEnded={onEnded}
             onError={() => setFailed(true)}
             aria-label="情境示意影片：農友在果園採收鳳梨與荔枝、與親子家庭互動，最後用手機整理商品"
           />
         )}
         {!failed && (
-          <div className="absolute bottom-3 right-3 flex gap-2">
+          <div
+            className={
+              'absolute inset-x-0 bottom-0 flex items-center justify-end gap-2 bg-gradient-to-t from-black/45 to-transparent px-3 pb-3 pt-10 transition-opacity duration-300 group-focus-within:opacity-100 group-hover:opacity-100 ' +
+              (showCtl ? 'opacity-100' : 'opacity-0')
+            }
+          >
             <button
               type="button"
               onClick={toggle}
