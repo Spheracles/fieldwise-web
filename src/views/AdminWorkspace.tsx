@@ -90,7 +90,7 @@ export function AdminWorkspace() {
   return (
     <ViewShell
       title="管理者工作台"
-      icon="kanban"
+      brand="tracking"
       desc="洽詢名單、案件階段、任務分派、方案到期提醒與月營收預估。正式版僅限管理員與獲授權顧問登入使用。"
       other={{ to: 'client-demo', label: '切換到客戶工作台示範' }}
     >

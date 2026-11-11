@@ -22,6 +22,7 @@ export function Services() {
       <div className="container-x">
         <SectionHeading
           id="services-title"
+          brand="services"
           eyebrow="我們的核心服務"
           title={
             <>

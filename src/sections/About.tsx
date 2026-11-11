@@ -1,6 +1,7 @@
 import { ABOUT } from '../config/content';
 import { CLIENT_DEMO } from '../data/demo';
 import { Icon } from '../components/ui/Icon';
+import { BrandIcon } from '../components/BrandIcons';
 import { Button, Reveal, SectionHeading, Tag } from '../components/ui/primitives';
 
 export function WorkspacePreview() {
@@ -15,6 +16,7 @@ export function WorkspacePreview() {
       <div className="container-x">
         <SectionHeading
           id="ws-title"
+          brand="portal"
           eyebrow="陪跑工具示範"
           title="陪跑過程，進度看得見。"
           desc="正式合作後，客戶與顧問會在同一個工作台檢視里程碑、任務、訂單、工時與指標。以下為介面示範，資料皆為虛構。"
@@ -24,7 +26,7 @@ export function WorkspacePreview() {
             <article className="flex h-full flex-col rounded-[28px] border border-line bg-white p-6 shadow-soft sm:p-8">
               <div className="flex items-center justify-between gap-3">
                 <h3 className="flex items-center gap-2 text-[20px] font-bold text-forest-deep">
-                  <Icon name="layout-dashboard" size={22} className="text-forest" />
+                  <BrandIcon name="portal" size={36} />
                   客戶工作台
                 </h3>
                 <Tag kind="demo" />
@@ -52,7 +54,7 @@ export function WorkspacePreview() {
             <article className="flex h-full flex-col rounded-[28px] border border-line bg-white p-6 shadow-soft sm:p-8">
               <div className="flex items-center justify-between gap-3">
                 <h3 className="flex items-center gap-2 text-[20px] font-bold text-forest-deep">
-                  <Icon name="kanban" size={22} className="text-forest" />
+                  <BrandIcon name="tracking" size={36} />
                   管理者工作台
                 </h3>
                 <Tag kind="demo" />
@@ -83,7 +85,8 @@ export function About() {
       <div className="container-x">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
           <div>
-            <SectionHeading align="left" id="about-title" eyebrow="關於我們" title="一支懂數位、也願意下田的青年團隊。" />
+            <SectionHeading align="left" id="about-title" brand="about"
+          eyebrow="關於我們" title="一支懂數位、也願意下田的青年團隊。" />
             <Reveal className="-mt-4 space-y-4 text-[17px] leading-[1.95] text-subtle">
               {ABOUT.philosophy.map((p) => (
                 <p key={p}>{p}</p>

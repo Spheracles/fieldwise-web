@@ -68,7 +68,8 @@ export function Contact() {
           <SectionHeading
             align="left"
             id="contact-title"
-            eyebrow="預約諮詢"
+            brand="contact"
+          eyebrow="預約諮詢"
             title="預約 20 分鐘免費初談。"
             desc="先聊聊農場現在的狀況與最想解決的事。初談僅做問題初篩，不會要求你當場決定任何方案。"
           />

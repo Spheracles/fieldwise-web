@@ -26,6 +26,7 @@ export function Cases() {
       <div className="container-x">
         <SectionHeading
           id="cases-title"
+          brand="cases"
           eyebrow="轉型情境"
           title="三個常見情境，看看陪跑怎麼進行。"
           desc={

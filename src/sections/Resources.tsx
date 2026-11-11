@@ -16,7 +16,8 @@ export function Resources() {
   return (
     <section id="resources" aria-labelledby="res-title" className="bg-white/60 py-20 lg:py-28">
       <div className="container-x">
-        <SectionHeading id="res-title" eyebrow="資源專欄" title="把經營知識，整理成今天就能用的清單。" desc="農業經營、AI 工具、申請資訊與法規提醒。目前文章為內容範例，正式上線前會由團隊與專業人士審閱。" />
+        <SectionHeading id="res-title" brand="resources"
+          eyebrow="資源專欄" title="把經營知識，整理成今天就能用的清單。" desc="農業經營、AI 工具、申請資訊與法規提醒。目前文章為內容範例，正式上線前會由團隊與專業人士審閱。" />
 
         <div className="scroll-row -mx-5 mb-8 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0" role="group" aria-label="文章分類">
           {CATS.map((c) => (

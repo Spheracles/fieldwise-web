@@ -61,6 +61,7 @@ export function Diagnosis() {
         <SectionHeading
           tone="dark"
           id="diagnosis-title"
+          brand="diagnosis"
           eyebrow="1 分鐘快速診斷"
           title="先勾選現在的狀況，看看可以從哪裡開始。"
           desc="依你勾選的項目，對應出可能的服務方向與第一步準備。這不是正式評估，只是幫你在初談前先整理思緒。"

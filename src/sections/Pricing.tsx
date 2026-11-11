@@ -29,6 +29,7 @@ export function Pricing() {
       <div className="container-x">
         <SectionHeading
           id="pricing-title"
+          brand="planning"
           eyebrow="陪跑方案"
           title="依農場階段選擇，隨時可以調整。"
           desc="三種月費陪跑方案，都可以選擇月繳或季繳。不確定適合哪一個，就先預約免費初談。"

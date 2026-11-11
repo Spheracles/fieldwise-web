@@ -3,6 +3,7 @@ import { cx } from '../../lib/format';
 import { useApp } from '../../context/AppContext';
 import { useReveal } from '../../hooks/useMotion';
 import { Icon, type IconName } from './Icon';
+import { BrandIcon, type BrandIconName } from '../BrandIcons';
 
 /* ---------------- Button ---------------- */
 
@@ -143,7 +144,9 @@ export function SectionHeading({
   align = 'center',
   tone = 'light',
   id,
+  brand,
 }: {
+  brand?: BrandIconName;
   eyebrow: string;
   title: ReactNode;
   desc?: ReactNode;
@@ -160,7 +163,13 @@ export function SectionHeading({
           tone === 'dark' ? 'text-gold' : 'text-gold-deep',
         )}
       >
-        <Icon name="leaf" size={18} />
+        {brand ? (
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-cream ring-1 ring-line">
+            <BrandIcon name={brand} size={26} />
+          </span>
+        ) : (
+          <Icon name="leaf" size={18} />
+        )}
         {eyebrow}
       </p>
       <h2
@@ -274,16 +283,17 @@ export function Card({ children, className }: { children: ReactNode; className?:
 
 /* ---------------- Logo ---------------- */
 
+/** 品牌圖示：田埂、嫩芽、朝陽（與 public/favicon.svg 同一組圖形，去掉底色方塊） */
 export function LogoMark({ size = 44 }: { size?: number }) {
   return (
-    <svg width={size} height={size * (40 / 48)} viewBox="0 0 48 40" aria-hidden="true">
-      <circle cx="26" cy="15" r="7.5" fill="#C59A43" />
-      <path d="M1 29.5C9 21 18 18.5 27 23.5c6 3.3 12 4 20 1.5V39H1z" fill="#8DA582" />
-      <path d="M1 34c9-6.5 20-8 31-3.6 5 2 10 2.2 15 .9V39H1z" fill="#214D3D" />
-      <path d="M6 36.2c7-3.6 15-4.6 23-2.3M12 38.4c5-1.6 10-1.9 15-.8" stroke="#F8F6EF" strokeWidth="1.1" strokeLinecap="round" fill="none" opacity=".55" />
-      <path d="M38.5 27.5V15" stroke="#214D3D" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M38.5 19c-.4-4.4 2.4-7.4 7-7.6.2 4.6-2.6 7.5-7 7.6z" fill="#214D3D" />
-      <path d="M38.4 22.5c.3-3.7-2-6.2-5.9-6.4-.2 3.9 2.2 6.3 5.9 6.4z" fill="#8DA582" />
+    <svg width={size} height={size} viewBox="6 12 112 112" aria-hidden="true">
+      <circle cx="89" cy="37" r="17" fill="#C59A43" />
+      <path d="M62 69 C61 55 62 42 64 35" stroke="#214D3D" strokeWidth="7" strokeLinecap="round" fill="none" />
+      <path d="M61 50 C45 51 34 42 33 28 C50 26 60 35 61 50 Z" fill="#8DA582" />
+      <path d="M65 42 C68 27 81 20 94 21 C91 36 80 43 65 42 Z" fill="#214D3D" />
+      <path d="M16 94 C39 72 65 67 111 73" stroke="#214D3D" strokeWidth="14" strokeLinecap="round" fill="none" />
+      <path d="M24 111 C48 88 76 83 111 90" stroke="#8DA582" strokeWidth="14" strokeLinecap="round" fill="none" />
+      <path d="M69 115 C83 105 98 103 111 107" stroke="#638B50" strokeWidth="13" strokeLinecap="round" fill="none" />
     </svg>
   );
 }

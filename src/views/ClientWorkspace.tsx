@@ -7,8 +7,9 @@ import type { Order, OrderStatus, Task, TaskStatus } from '../types/domain';
 import { BudgetBars, ColumnChart, ProgressBar, StatTile } from '../components/charts';
 import { Icon, type IconName } from '../components/ui/Icon';
 import { NavLink, Tag } from '../components/ui/primitives';
+import { BrandIcon, type BrandIconName } from '../components/BrandIcons';
 
-export function ViewShell({ title, desc, icon, children, other }: { title: string; desc: string; icon: IconName; children: ReactNode; other: { to: string; label: string } }) {
+export function ViewShell({ title, desc, brand, children, other }: { title: string; desc: string; brand: BrandIconName; children: ReactNode; other: { to: string; label: string } }) {
   return (
     <main id="main" className="pb-24 pt-6 lg:pb-16 lg:pt-10">
       <div className="container-x">
@@ -23,8 +24,8 @@ export function ViewShell({ title, desc, icon, children, other }: { title: strin
         <header className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1 className="flex items-center gap-3 font-serif text-[30px] font-bold text-forest-deep sm:text-[36px]">
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-forest text-white">
-                <Icon name={icon} size={24} />
+              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-soft ring-1 ring-line">
+                <BrandIcon name={brand} size={40} />
               </span>
               {title}
             </h1>
@@ -97,7 +98,7 @@ export function ClientWorkspace() {
   return (
     <ViewShell
       title="客戶工作台"
-      icon="layout-dashboard"
+      brand="portal"
       desc={`${d.org}・${planFullName(plan)}・${d.period}・負責顧問：${d.consultant}`}
       other={{ to: 'admin-demo', label: '切換到管理者工作台示範' }}
     >

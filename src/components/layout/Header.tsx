@@ -8,13 +8,14 @@ import { useScrollSpy } from '../../hooks/useMotion';
 import { Icon } from '../ui/Icon';
 import { Button, Logo, NavLink } from '../ui/primitives';
 import { LineButton } from '../ui/LineButton';
+import { BrandIcon, type BrandIconName } from '../BrandIcons';
 
-export const NAV_ITEMS = [
-  { id: 'pricing', label: '陪跑方案' },
-  { id: 'cases', label: '轉型情境' },
-  { id: 'about', label: '關於我們' },
-  { id: 'resources', label: '資源專欄' },
-  { id: 'contact', label: '預約諮詢' },
+export const NAV_ITEMS: { id: string; label: string; brand: BrandIconName }[] = [
+  { id: 'pricing', label: '陪跑方案', brand: 'planning' },
+  { id: 'cases', label: '轉型情境', brand: 'cases' },
+  { id: 'about', label: '關於我們', brand: 'about' },
+  { id: 'resources', label: '資源專欄', brand: 'resources' },
+  { id: 'contact', label: '預約諮詢', brand: 'contact' },
 ];
 
 const SPY_IDS = ['services', ...NAV_ITEMS.map((n) => n.id)];
@@ -114,6 +115,7 @@ export function Header() {
     );
 
   return (
+    <>
     <header
       className={cx(
         'sticky top-0 z-50 transition-[background-color,box-shadow] duration-300',
@@ -213,8 +215,16 @@ export function Header() {
         </div>
       </div>
 
-      {menuOpen && <MobileMenu onClose={() => setMenuOpen(false)} />}
     </header>
+    {menuOpen && (
+      <MobileMenu
+        onClose={() => {
+          setMenuOpen(false);
+          menuBtnRef.current?.focus();
+        }}
+      />
+    )}
+    </>
   );
 }
 
@@ -233,8 +243,21 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
     navigate(id);
   };
   return (
-    <div id="mobile-menu" className="fixed inset-x-0 bottom-0 top-[72px] z-40 overflow-y-auto bg-cream lg:hidden">
-      <nav aria-label="手機版導覽" className="container-x flex flex-col gap-1 pb-32 pt-4">
+    <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="網站選單" className="fade-in fixed inset-0 z-[60] overflow-y-auto bg-cream lg:hidden">
+      <div className="sticky top-0 z-10 border-b border-line bg-cream/95 backdrop-blur-md">
+        <div className="container-x flex h-[72px] items-center justify-between">
+          <Logo compact />
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-forest/20 bg-white/70 text-forest"
+            aria-label="關閉選單"
+          >
+            <Icon name="x" size={22} />
+          </button>
+        </div>
+      </div>
+      <nav aria-label="手機版導覽" className="container-x flex flex-col gap-1 pb-16 pt-4">
         <p className="px-2 pb-1 pt-2 text-[14px] font-semibold tracking-[0.15em] text-gold-deep">服務項目</p>
         <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
           {SERVICES.map((s, i) => (
@@ -261,21 +284,24 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
           <a
             key={n.id}
             href={`#${n.id}`}
-            className="flex min-h-12 items-center justify-between rounded-2xl px-3 text-[18px] font-medium text-forest-deep hover:bg-white"
+            className="flex min-h-14 items-center justify-between rounded-2xl px-3 text-[18px] font-medium text-forest-deep hover:bg-white"
             onClick={(e) => {
               e.preventDefault();
               go(n.id);
             }}
           >
-            {n.label}
+            <span className="flex items-center gap-3">
+              <BrandIcon name={n.brand} size={34} />
+              {n.label}
+            </span>
             <Icon name="chevron-right" size={20} className="text-sage" />
           </a>
         ))}
         <div className="my-3 h-px bg-line" />
         <p className="px-2 pb-1 text-[14px] font-semibold tracking-[0.15em] text-gold-deep">示範工具</p>
         {[
-          { id: 'client-demo', label: '客戶工作台示範', icon: 'layout-dashboard' as const },
-          { id: 'admin-demo', label: '管理者工作台示範', icon: 'kanban' as const },
+          { id: 'client-demo', label: '客戶工作台示範', brand: 'portal' as const },
+          { id: 'admin-demo', label: '管理者工作台示範', brand: 'tracking' as const },
         ].map((d) => (
           <a
             key={d.id}
@@ -286,7 +312,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
               go(d.id);
             }}
           >
-            <Icon name={d.icon} size={20} className="text-forest" />
+            <BrandIcon name={d.brand} size={30} />
             {d.label}
           </a>
         ))}

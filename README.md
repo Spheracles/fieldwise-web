@@ -32,6 +32,7 @@ src/
 │  ├─ services.ts     服務 A–F 的內容、交付成果、服務邊界、合規提示
 │  ├─ content.ts      痛點、優勢、流程、診斷對應、模擬案例、FAQ、專欄範例、關於我們
 │  └─ form.ts         表單選項（22 縣市、角色、客戶類型、問題、規模、預算…）
+├─ components/BrandIcons.tsx  品牌雙色圖示（依「網站分頁 Icon 設計提案」重繪）
 ├─ data/demo.ts       工作台示範資料（全部虛構）
 ├─ types/domain.ts    正式版資料模型草案（Lead、Organization、Subscription…）
 ├─ context/AppContext.tsx  #hash 路由、表單帶入、服務分頁、提示訊息
@@ -135,7 +136,9 @@ src/
 - 為了白字對比 ≥ 4.5:1，金色按鈕底使用加深的 `#976C25`；`#C59A43` 用於線條、圖示與裝飾
 - `#6C776E` 在奶油白底上的對比略低於 4.5:1，所以段落文字改用 `#56625A`（`text-subtle`），`#6C776E` 保留給白底卡片的輔助說明
 - 字體：Noto Sans TC／Noto Serif TC（Google Fonts，開放授權），系統備援微軟正黑體、蘋方
-- 圖示：內聯 SVG，幾何資料取自 Lucide Icons（ISC License），正式專案可改用 `lucide-react`
+- 品牌圖示：`public/favicon.svg`、`favicon.ico`（16–64px）、`apple-touch-icon.png`（180px）、`icon-192.png`／`icon-512.png` 與 `site.webmanifest`；頁首與頁尾 Logo 使用同一組圖形
+- 品牌雙色圖示（`BrandIcon`）：首頁、服務方案、案例、知識專欄、關於我們、聯絡諮詢，以及需求診斷、顧問初談、營運盤點、導入與陪跑、績效追蹤、客戶工作台；用於合作流程、區塊標題、手機選單與工作台
+- 介面小圖示：內聯 SVG，幾何資料取自 Lucide Icons（ISC License），正式專案可改用 `lucide-react`
 - 已檢查 1440／768／390 px 皆無水平溢出；觸控目標 ≥ 44px；內文 ≥ 16px
 
 ## 內容原則

@@ -2,6 +2,7 @@
  * 首頁文案與內容資料。所有案例為「模擬案例」、所有文章為「內容範例」。
  */
 import type { IconName } from '../components/ui/Icon';
+import type { BrandIconName } from '../components/BrandIcons';
 import type { ProblemId } from './form';
 import type { ServiceId } from './services';
 import type { PlanId } from './plans';
@@ -58,12 +59,12 @@ export const ADVANTAGES: { title: string; desc: string; icon: IconName }[] = [
   },
 ];
 
-export const PROCESS_STEPS: { title: string; desc: string; output: string; icon: IconName }[] = [
-  { title: '線上需求診斷', desc: '在網站勾選目前的困擾，先看看可能的方向。', output: '初步方向', icon: 'list-checks' },
-  { title: '顧問初談', desc: '20 分鐘免費線上初談，釐清最需要先處理的問題。', output: '問題初篩', icon: 'message-circle' },
-  { title: '盤點與報價', desc: '了解現場、資料與預算，提出服務範圍與報價。', output: '服務範圍與報價單', icon: 'clipboard-check' },
-  { title: '導入及執行', desc: '依行動清單逐項導入流程、工具與制度，一起做。', output: '行動清單與追蹤表', icon: 'tractor' },
-  { title: '每月／每季回顧', desc: '對照基準值與目標，調整下一階段的優先順序。', output: '回顧紀錄與下一步', icon: 'refresh-cw' },
+export const PROCESS_STEPS: { title: string; desc: string; output: string; icon: IconName; brand: BrandIconName }[] = [
+  { title: '線上需求診斷', desc: '在網站勾選目前的困擾，先看看可能的方向。', output: '初步方向', icon: 'list-checks', brand: 'diagnosis' },
+  { title: '顧問初談', desc: '20 分鐘免費線上初談，釐清最需要先處理的問題。', output: '問題初篩', icon: 'message-circle', brand: 'consultation' },
+  { title: '盤點與報價', desc: '了解現場、資料與預算，提出服務範圍與報價。', output: '服務範圍與報價單', icon: 'clipboard-check', brand: 'planning' },
+  { title: '導入及執行', desc: '依行動清單逐項導入流程、工具與制度，一起做。', output: '行動清單與追蹤表', icon: 'tractor', brand: 'implementation' },
+  { title: '每月／每季回顧', desc: '對照基準值與目標，調整下一階段的優先順序。', output: '回顧紀錄與下一步', icon: 'refresh-cw', brand: 'tracking' },
 ];
 
 /* ---------------- 快速診斷 ---------------- */

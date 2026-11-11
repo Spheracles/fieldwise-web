@@ -2,6 +2,7 @@ import { ADVANTAGES, PROCESS_STEPS } from '../config/content';
 import { Icon } from '../components/ui/Icon';
 import { Reveal, SectionHeading } from '../components/ui/primitives';
 import { GrowthStages } from '../components/art';
+import { BrandIcon } from '../components/BrandIcons';
 
 export function Advantages() {
   return (
@@ -48,13 +49,14 @@ export function Process() {
   return (
     <section id="process" aria-labelledby="process-title" className="bg-white/60 py-20 lg:py-28">
       <div className="container-x">
-        <SectionHeading id="process-title" eyebrow="合作流程" title="五個步驟，從初談走到持續改善。" desc="每一步都有明確的產出，你可以隨時知道現在在哪裡、下一步要做什麼。" />
+        <SectionHeading id="process-title" brand="implementation"
+          eyebrow="合作流程" title="五個步驟，從初談走到持續改善。" desc="每一步都有明確的產出，你可以隨時知道現在在哪裡、下一步要做什麼。" />
         <ol className="relative grid grid-cols-1 gap-5 lg:grid-cols-5 lg:gap-4">
-          <span aria-hidden className="absolute left-[27px] top-6 bottom-6 w-px bg-gradient-to-b from-sage via-gold/60 to-sage lg:left-[8%] lg:right-[8%] lg:top-[27px] lg:bottom-auto lg:h-px lg:w-auto lg:bg-gradient-to-r" />
+          <span aria-hidden className="absolute left-[31px] top-8 bottom-8 w-px bg-gradient-to-b from-sage via-gold/60 to-sage lg:left-[8%] lg:right-[8%] lg:top-[31px] lg:bottom-auto lg:h-px lg:w-auto lg:bg-gradient-to-r" />
           {PROCESS_STEPS.map((s, i) => (
             <Reveal as="li" key={s.title} delay={i * 90} className="relative flex gap-4 lg:flex-col lg:items-center lg:text-center">
-              <span className="relative z-10 inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-forest text-white ring-8 ring-[#FCFBF8]">
-                <Icon name={s.icon} size={24} />
+              <span className="relative z-10 inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white shadow-soft ring-1 ring-line outline outline-8 outline-[#FCFBF8]">
+                <BrandIcon name={s.brand} size={44} />
               </span>
               <div className="flex-1 rounded-3xl border border-line/80 bg-white p-5 shadow-soft lg:mt-5 lg:w-full">
                 <p className="text-[13px] font-bold tracking-[0.2em] text-gold-deep">STEP 0{i + 1}</p>
