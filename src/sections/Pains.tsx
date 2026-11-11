@@ -1,6 +1,7 @@
 import { MORE_PAINS, PAINS } from '../config/content';
 import { Icon } from '../components/ui/Icon';
 import { Button, Reveal, SectionHeading } from '../components/ui/primitives';
+import { FarmStory } from './FarmStory';
 
 export function Pains() {
   return (
@@ -48,6 +49,7 @@ export function Pains() {
             勾選狀況，看建議方向
           </Button>
         </Reveal>
+        <FarmStory />
       </div>
     </section>
   );
