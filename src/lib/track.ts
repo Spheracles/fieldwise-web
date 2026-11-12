@@ -12,7 +12,8 @@ export type TrackEventName =
   | 'form_submit_demo'
   | 'line_click'
   | 'service_view'
-  | 'article_open';
+  | 'article_open'
+  | 'story_open';
 
 export interface TrackEvent {
   name: TrackEventName;
@@ -52,4 +53,5 @@ export const EVENT_LABELS: Record<TrackEventName, string> = {
   line_click: 'LINE 洽詢點擊',
   service_view: '查看服務細節',
   article_open: '開啟專欄文章',
+  story_open: '閱讀產地故事',
 };

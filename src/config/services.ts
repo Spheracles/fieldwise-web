@@ -22,6 +22,8 @@ export interface Service {
   boundary: string[];
   compliance?: string;
   relatedProblem: ProblemId;
+  /** 延伸閱讀：產地故事專欄文章 id */
+  stories?: string[];
 }
 
 export const SERVICES: Service[] = [
@@ -70,6 +72,7 @@ export const SERVICES: Service[] = [
       '未經你同意，不會把客戶個資、訂單或企劃內容提供給外部 AI 服務。',
     ],
     relatedProblem: 'orders',
+    stories: ['story-fruit-journey'],
   },
   {
     id: 'proposal',
@@ -103,6 +106,7 @@ export const SERVICES: Service[] = [
     compliance:
       '親子農事體驗不等於依法核准的「休閒農場」。若涉及休閒農場申設、農地使用、建物、消防、食品、保險與觀光相關規範，需依個案向主管機關查核。',
     relatedProblem: 'family',
+    stories: ['story-kids-orchard', 'story-orchard-learning'],
   },
   {
     id: 'land',

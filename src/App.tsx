@@ -15,6 +15,9 @@ import { Contact } from './sections/Contact';
 import { ClientWorkspace } from './views/ClientWorkspace';
 import { AdminWorkspace } from './views/AdminWorkspace';
 import { LegalView } from './views/LegalView';
+import { StoryView } from './views/StoryView';
+import { Stories } from './sections/Stories';
+import { STORIES } from './config/stories';
 
 const TITLES: Record<string, string> = {
   home: '田序共創 FIELDWISE｜農業經營陪跑 × AI 數位轉型',
@@ -23,6 +26,7 @@ const TITLES: Record<string, string> = {
   privacy: '隱私權政策（草稿）｜田序共創 FIELDWISE',
   terms: '服務條款（草稿）｜田序共創 FIELDWISE',
   disclaimer: '免責聲明｜田序共創 FIELDWISE',
+  ...Object.fromEntries(STORIES.map((x) => [x.id, `${x.title}｜產地故事｜田序共創 FIELDWISE`])),
 };
 
 function HomeView() {
@@ -38,6 +42,7 @@ function HomeView() {
       <Cases />
       <WorkspacePreview />
       <About />
+      <Stories />
       <Resources />
       <FAQ />
       <Contact />
@@ -62,6 +67,7 @@ function Shell() {
       {view === 'client-demo' && <ClientWorkspace />}
       {view === 'admin-demo' && <AdminWorkspace />}
       {(view === 'privacy' || view === 'terms' || view === 'disclaimer') && <LegalView doc={view} key={view} />}
+      {view.startsWith('story-') && <StoryView id={view} key={view} />}
       <Footer />
       <MobileCTA />
     </>

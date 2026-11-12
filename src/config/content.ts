@@ -164,6 +164,8 @@ export interface SimCase {
   metrics: string[];
   services: ServiceId[];
   note?: string;
+  /** 延伸閱讀：產地故事專欄文章 id */
+  stories?: string[];
 }
 
 export const CASES: SimCase[] = [
@@ -188,6 +190,7 @@ export const CASES: SimCase[] = [
     steps: ['統一訂單入口與必填欄位', '定義訂單狀態：待確認→備貨→已出貨', '建立出貨看板與每日彙整', '設計提醒與月報表的需求規格'],
     metrics: ['漏單與錯單件數', '每筆訂單處理時間', '月底對帳所需時間'],
     services: ['automation'],
+    stories: ['story-fruit-journey'],
   },
   {
     id: 'family',
@@ -199,6 +202,7 @@ export const CASES: SimCase[] = [
     steps: ['場域與動線盤點、安全初查', '設計 2–3 個季節性活動模組', '法規查核清單與保險需求整理', '收支試算後小規模試辦並收集回饋'],
     metrics: ['試辦場次的報名與出席', '參加者回饋', '單場收入與成本'],
     services: ['transition', 'land'],
+    stories: ['story-kids-orchard', 'story-orchard-learning'],
     note: '是否需申請休閒農場或其他許可，須依個案向主管機關確認。',
   },
 ];

@@ -2,12 +2,16 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { ProblemId } from '../config/form';
 import type { ServiceId } from '../config/services';
 import { prefersReducedMotion } from '../hooks/useMotion';
+import { STORIES } from '../config/stories';
 
 /** 可用 #hash 直接開啟的獨立畫面；其他 #hash 視為首頁區塊錨點 */
-export const VIEWS = ['client-demo', 'admin-demo', 'privacy', 'terms', 'disclaimer'] as const;
-export type View = 'home' | (typeof VIEWS)[number];
+const BASE_VIEWS = ['client-demo', 'admin-demo', 'privacy', 'terms', 'disclaimer'] as const;
+/** 產地故事專欄每篇文章的閱讀頁，例如 #story-kids-orchard */
+export type StoryView = `story-${string}`;
+export type View = 'home' | (typeof BASE_VIEWS)[number] | StoryView;
+export const VIEWS: readonly string[] = [...BASE_VIEWS, ...STORIES.map((s) => s.id)];
 
-const isView = (h: string): h is (typeof VIEWS)[number] => (VIEWS as readonly string[]).includes(h);
+const isView = (h: string): h is Exclude<View, 'home'> => VIEWS.includes(h);
 
 export interface Prefill {
   plan?: string;

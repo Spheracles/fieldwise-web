@@ -14,6 +14,7 @@ export const NAV_ITEMS: { id: string; label: string; brand: BrandIconName }[] = 
   { id: 'pricing', label: '陪跑方案', brand: 'planning' },
   { id: 'cases', label: '轉型情境', brand: 'cases' },
   { id: 'about', label: '關於我們', brand: 'about' },
+  { id: 'stories', label: '產地故事', brand: 'home' },
   { id: 'resources', label: '資源專欄', brand: 'resources' },
   { id: 'contact', label: '預約諮詢', brand: 'contact' },
 ];

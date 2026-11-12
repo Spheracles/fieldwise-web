@@ -1,3 +1,4 @@
+import { StoryLinks } from './Stories';
 import { useRef, type KeyboardEvent } from 'react';
 import { SERVICES, type ServiceId } from '../config/services';
 import { useApp } from '../context/AppContext';
@@ -226,6 +227,7 @@ function ServiceDetail() {
               {s.compliance}
             </p>
           )}
+          <StoryLinks ids={s.stories} from={`service_${s.id}`} className="rounded-3xl bg-cream/80 p-5 sm:p-6" />
           <Button
             className="mt-1 self-start"
             icon="calendar-check"

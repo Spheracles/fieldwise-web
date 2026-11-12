@@ -4,6 +4,7 @@ import { getService } from '../config/services';
 import { cx } from '../lib/format';
 import { Icon } from '../components/ui/Icon';
 import { SectionHeading, Tag } from '../components/ui/primitives';
+import { StoryLinks } from './Stories';
 
 export function Cases() {
   const [active, setActive] = useState(CASES[0].id);
@@ -138,6 +139,11 @@ export function Cases() {
               )}
             </div>
           </div>
+          {c.stories && (
+            <div className="border-t border-line bg-cream/60 px-5 py-5 sm:px-8">
+              <StoryLinks ids={c.stories} from={`case_${c.id}`} />
+            </div>
+          )}
         </article>
       </div>
     </section>

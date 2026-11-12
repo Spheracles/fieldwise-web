@@ -18,7 +18,7 @@ export const CLIENT_TYPES = [
   '其他',
 ] as const;
 
-export type ProblemId = 'labor' | 'funds' | 'orders' | 'proposal' | 'family' | 'land' | 'digital' | 'other';
+export type ProblemId = 'labor' | 'funds' | 'orders' | 'proposal' | 'family' | 'land' | 'digital' | 'notify' | 'other';
 
 export const PROBLEMS: { id: ProblemId; label: string }[] = [
   { id: 'labor', label: '人力與排班' },
@@ -28,6 +28,7 @@ export const PROBLEMS: { id: ProblemId; label: string }[] = [
   { id: 'family', label: '親子農事體驗' },
   { id: 'land', label: '農地環境整理' },
   { id: 'digital', label: 'AI 與數位工具導入' },
+  { id: 'notify', label: '產季通知與產地體驗' },
   { id: 'other', label: '其他' },
 ];
 
